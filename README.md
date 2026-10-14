@@ -1,0 +1,42 @@
+# chinook-tui
+
+A simple Go TUI app that browses the [Chinook](https://github.com/LearnXpressDirect/ChinookDatabase)
+music database hosted on Supabase.
+
+- Shows a **paginated, filterable list of artists** with the number of albums next to each name.
+- Press **enter** on an artist to see that artist's **album titles** (also paginated).
+- Press **esc** to go back, **q** to quit.
+
+## Run
+
+```sh
+go run .
+# or
+go build -o chinook-tui . && ./chinook-tui
+```
+
+The app connects to the Supabase project by default. To point it at a different
+project, set:
+
+```sh
+export SUPABASE_URL=https://your-project.supabase.co
+export SUPABASE_KEY=sb_publishable_...
+```
+
+## Keys
+
+| Key            | Action                          |
+| -------------- | ------------------------------- |
+| `↑`/`↓`, `j`/`k` | Move selection                |
+| `←`/`→`, `h`/`l`, `PgUp`/`PgDn` | Previous / next page |
+| `g` / `G`      | First / last item               |
+| `/`            | Filter the list                 |
+| `enter`        | Open selected artist's albums   |
+| `esc`          | Clear filter / go back / quit   |
+| `q`            | Quit                            |
+
+## Notes
+
+- Artist list + album counts are fetched in a single PostgREST request using an
+  embedded count: `select=artist_id,name,album(count)`.
+- Album titles are fetched on demand when an artist is selected.
